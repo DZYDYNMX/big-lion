@@ -1,0 +1,309 @@
+#!/usr/bin/env python3
+"""
+Generate all Richmond VA area pages for BigLion Plumbing.
+Also fixes any remaining TX/Houston references in existing area pages.
+"""
+import os
+
+ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# ── Area data: slug, display name, neighbourhoods, map query ──────────────
+AREAS = [
+    ("area-richmond-city",   "Richmond City",      "The Fan District,Museum District,Scott's Addition,Church Hill,Shockoe Bottom,Carytown,Oregon Hill,Jackson Ward,Bellevue,Ginter Park", "Richmond+City+VA"),
+    ("area-henrico",         "Henrico County",     "Lakeside,Sandston,Highland Springs,Varina,Glen Allen,Short Pump,Tuckahoe,Three Chopt,Fairfield,Brookland", "Henrico+County+VA"),
+    ("area-chesterfield",    "Chesterfield County","Midlothian,Chester,Bon Air,Swift Creek,Matoaca,Dale,Clover Hill,Ettrick,Enon,Magnolia Green", "Chesterfield+County+VA"),
+    ("area-colonial-heights","Colonial Heights",   "Lakeview,Violet Bank,South Park,Conjurers Neck,Ellerslie,Conduit Road,Colonial Avenue,Pickwick,Roslyn Hills,Shepherd Hills", "Colonial+Heights+VA"),
+    ("area-midlothian",      "Midlothian",         "Midlothian Village,Brandermill,Woodlake,Salisbury,Edgewater,Foxcroft,Spring Run,Hallsley,The Highlands,Rountrey", "Midlothian+VA"),
+    ("area-mechanicsville",  "Mechanicsville",     "Atlee,Cold Harbor,Hanover Courthouse,Bell Forest,Laurel Meadows,Randolph Farms,Chickahominy Bluff,Shady Grove,Meadowbrook Farms,Rural Point", "Mechanicsville+VA"),
+    ("area-short-pump",      "Short Pump",         "West Broad Village,Gayton,Twin Hickory,Bacova,Wellesley,Wyndham,Sommerton,Towne Center,Tuckahoe Creek,Holman Ridge", "Short+Pump+VA"),
+    ("area-glen-allen",      "Glen Allen",         "Innsbrook,Cross Ridge,Staples Mill,Shady Grove,Bacova,North Run,Hungary Creek,Springfield,Wistar,Deep Run", "Glen+Allen+VA"),
+    ("area-ashland",         "Ashland",            "Downtown Ashland,Elmont,Ashcake,Hanover Village,Old Ashland,Lewistown,Elmont Road,Sliding Hill,Ashland Meadows,Randolph Farms", "Ashland+VA"),
+    ("area-sandston",        "Sandston",           "Highland Springs,Sandston Village,Oakwood,Battlefield Park,Willowdale,Elko,White Oak,Edwards,Rollingwood,Oakdale", "Sandston+VA"),
+    ("area-highland-springs","Highland Springs",   "Barton Heights,Oakwood,Riverview,Rolfe,Fairmount,Laburnum,Fairfield,Harvie,Lakeside,Montrose", "Highland+Springs+VA"),
+    ("area-bon-air",         "Bon Air",            "Bon Air Village,Windsor Farms,Stratford Hills,Huguenot,Stony Point,Forest Hill,Westover Hills,Reams Road,Robious,Bexley", "Bon+Air+VA"),
+    ("area-powhatan",        "Powhatan",           "Powhatan Court House,Fine Creek,Flat Rock,Huguenot Trail,Maidens,Moseley,Genito,Otterdale,Trenholm,Dorset", "Powhatan+VA"),
+    ("area-petersburg",      "Petersburg",         "Old Town,Walnut Hill,Blandford,Ettrick,Colonial Heights,Fort Lee,Pocahontas Island,Violet Bank,Youngs,Commerce Street", "Petersburg+VA"),
+    ("area-hopewell",        "Hopewell",           "City Point,Appomattox,Crescent Hills,Cavalier Square,Elm Drive,Woodlawn,Floral Hills,Weston,Colonial,Temple Avenue", "Hopewell+VA"),
+    ("area-chester",         "Chester",            "Chester Village,Bailey Bridge,Dutch Gap,Bermuda,Enon,Harrowgate,Centralia,Meadowbrook,Falling Creek,Cogbill", "Chester+VA"),
+    ("area-tuckahoe",        "Tuckahoe",           "Three Chopt,Gayton,Ridgefield,Westham,River Road,Parham,Horsepen,Patterson,Maybeury,Fox Chapel", "Tuckahoe+VA"),
+    ("area-varina",          "Varina",             "Sandston,Highland Springs,Charles City,Osborne,New Market,Darbytown,Dorey,Bottoms Bridge,Seven Pines,Williamsburg Road", "Varina+VA"),
+    ("area-goochland",       "Goochland",          "Goochland Court House,Hadensville,Maidens,Sandy Hook,Centerville,Dogtown,Fife,Manakin,Gum Spring,Shallow Well", "Goochland+VA"),
+    ("area-hanover",         "Hanover",            "Ashland,Mechanicsville,Atlee,Beaverdam,Doswell,Hanover Court House,Cold Harbor,Montpelier,Studley,Yellow Tavern", "Hanover+VA"),
+]
+
+NAV_BLOCK = """    <header class="navbar">
+        <div class="nav-main">
+            <a href="index.html" class="logo-img-link"><img src="assets/biglion-logo.png" alt="BigLion Plumbing" class="nav-logo-img"></a>
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li class="nav-services-list">
+                    <a href="services.html">Services <span class="desktop-only-arrow">▾</span></a>
+                    <div class="dropdown-menu">
+                        <a href="services.html">View All Services</a>
+                        <a href="service-drain.html">Drain Cleaning</a>
+                        <a href="service-tap.html">Tap Repair</a>
+                        <a href="service-disposal.html">Waste Disposal</a>
+                        <a href="service-leak.html">Leak Detection</a>
+                        <a href="service-repipe.html">System Repipe</a>
+                        <a href="service-outdoor.html">Outdoor Plumbing</a>
+                        <a href="service-sewer.html">Sewer Cleaning</a>
+                        <a href="service-sump.html">Sump Pumps</a>
+                        <a href="service-toilet.html">Shower &amp; Toilet</a>
+                        <a href="service-waterheater.html">Water Heaters</a>
+                        <a href="service-construction.html">New Construction</a>
+                        <a href="service-emergency.html">Emergency Repairs</a>
+                    </div>
+                </li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li>
+                    <a href="areas.html">Service Areas <span class="desktop-only-arrow">▾</span></a>
+                    <div class="dropdown-menu">
+                        <a href="areas.html">View All Areas</a>
+                        <a href="area-richmond-city.html">Richmond City</a>
+                        <a href="area-henrico.html">Henrico County</a>
+                        <a href="area-chesterfield.html">Chesterfield</a>
+                        <a href="area-midlothian.html">Midlothian</a>
+                        <a href="area-mechanicsville.html">Mechanicsville</a>
+                        <a href="area-colonial-heights.html">Colonial Heights</a>
+                    </div>
+                </li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="tel:+18046166167" class="nav-phone-inline" style="color: var(--red); font-weight: 600;">(804) 616-6167</a></li>
+                <li><button class="nav-cta-btn contact-btn">Get a Quote</button></li>
+            </ul>
+        </div>
+    </header>"""
+
+FOOTER_BLOCK = """    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="index.html" class="logo-img-link"><img src="assets/biglion-logo.png" alt="BigLion Plumbing" class="nav-logo-img" style="height:60px;"></a>
+                <p>BigLion Plumbing serves the greater Richmond, VA area with professional, honest, and dependable plumbing solutions for every home and business.</p>
+                <div class="nav-social" style="margin-top: 1rem;">
+                    <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg></a>
+                    <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="index.html#faq">FAQ</a></li>
+                    <li><a href="#" class="contact-btn">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="service-drain.html">Drain Cleaning</a></li>
+                    <li><a href="service-repipe.html">Repiping</a></li>
+                    <li><a href="service-waterheater.html">Water Heaters</a></li>
+                    <li><a href="service-leak.html">Leak Detection</a></li>
+                    <li><a href="service-sewer.html">Sewer Repair</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <ul>
+                    <li style="color:var(--muted); font-size:0.9rem;"><strong>Phone:</strong> <a href="tel:+18046166167">(804) 616-6167</a></li>
+                    <li style="color:var(--muted); font-size:0.9rem;"><strong>Email:</strong> <a href="mailto:info@biglionplumbing.com" style="color:var(--muted);">info@biglionplumbing.com</a></li>
+                    <li style="color:var(--muted); font-size:0.9rem;"><strong>Location:</strong> Richmond, VA</li>
+                    <li style="color:var(--muted); font-size:0.9rem;"><strong>Hours:</strong> 24/7 Emergency Service</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 BigLion Plumbing. All Rights Reserved. Licensed &amp; Insured.</p>
+            <div class="footer-legal">
+                <a href="toc.html">Terms &amp; Conditions</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>"""
+
+MODAL_BLOCK = """    <!-- Contact Modal -->
+    <div class="modal-overlay" id="contact-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Request Service in {name}</h2>
+            <p style="color: var(--muted); margin-bottom: 1rem; font-size: 0.95rem;">Fill out the form below or call us directly at <a href="tel:+18046166167" class="text-cyan">(804) 616-6167</a>.</p>
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent!'); this.closest('.modal-overlay').classList.remove('active'); document.body.classList.remove('no-scroll');">
+                <input type="text" aria-label="Full Name" placeholder="Full Name" required>
+                <input type="tel" aria-label="Phone Number" placeholder="Phone Number" required>
+                <input type="email" aria-label="Email Address" placeholder="Email Address">
+                <select id="modal-service" aria-label="Select a service" required>
+                    <option value="" disabled selected>Service Required</option>
+                    <option value="drain">Drain Cleaning</option>
+                    <option value="tap">Tap &amp; Fixture Repair</option>
+                    <option value="disposal">Waste Disposal</option>
+                    <option value="leak">Leak Detection</option>
+                    <option value="repipe">System Repipe</option>
+                    <option value="outdoor">Outdoor Plumbing</option>
+                    <option value="sewer">Sewer Cleaning</option>
+                    <option value="sump">Sump Pumps</option>
+                    <option value="toilet">Shower &amp; Toilet</option>
+                    <option value="waterheater">Water Heaters</option>
+                    <option value="construction">New Construction</option>
+                    <option value="emergency">Emergency Repairs</option>
+                    <option value="other">Other / General Inquiry</option>
+                </select>
+                <textarea aria-label="Tell us about the issue..." placeholder="Tell us about the issue..." rows="4" required></textarea>
+                <button type="submit" class="btn btn-cyan" style="width:100%; border:none; margin-top:0.5rem;">Submit Request</button>
+            </form>
+        </div>
+    </div>"""
+
+def build_page(slug, name, hoods_csv, map_query):
+    hoods = [h.strip() for h in hoods_csv.split(",")]
+    hood_items = "\n                                ".join(f"<span class='marquee-item'>{h}</span>" for h in hoods)
+    modal = MODAL_BLOCK.replace("{name}", name)
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigLion Plumbing | Expert Plumbers in {name}, VA</title>
+    <meta name="description" content="BigLion Plumbing provides reliable, professional plumbing services in {name}, VA. Drain cleaning, leak detection, water heater services, and 24/7 emergency repairs.">
+    <meta name="keywords" content="plumber {name}, emergency plumbing {name}, leak detection {name}, drain cleaning {name}, water heater {name}, sewer repair {name}">
+    <link rel="icon" href="data:,">
+    <meta property="og:title" content="BigLion Plumbing | Expert Plumbers in {name}, VA">
+    <meta property="og:description" content="Reliable plumbing services in {name}, VA. Call BigLion Plumbing at (804) 616-6167 for fast, honest service.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://biglionplumbing.com/{slug}.html">
+    <meta property="og:image" content="https://biglionplumbing.com/assets/hero-bg.jpg?v=58">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BigLion Plumbing | {name}, VA">
+    <meta name="twitter:description" content="Professional plumbing services in {name}, VA - call (804) 616-6167.">
+    <link rel="stylesheet" href="styles.css?v=58">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&display=swap"></noscript>
+    <link rel="canonical" href="https://biglionplumbing.com/{slug}.html">
+    <link rel="preload" as="image" href="assets/hero-bg.jpg?v=58" fetchpriority="high">
+    <script src="script.js?v=58" defer></script>
+</head>
+<body>
+{NAV_BLOCK}
+
+    <main class="main-content">
+        <section class="hero" style="background-image: url('assets/areas-hero.jpg?v=58');">
+            <div class="hero-inner fade-in">
+                <div class="hero-text">
+                    <h1>Expert Plumbing in {name}, VA</h1>
+                    <p style="font-size: 1.1rem; color: #e2e8f0; margin-bottom: 1.5rem; line-height: 1.6;">BigLion Plumbing provides fast, dependable plumbing services across {name} and surrounding communities. Whether it's a burst pipe, clogged drain, water heater issue, or routine maintenance - Jamar and the BigLion team are ready to help.</p>
+                    
+                    <div class="marquee-container" style="margin-bottom: 2rem; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0.75rem 0; width: 100%;">
+                        <div class="marquee-track">
+                            {hood_items}
+                            {hood_items}
+                        </div>
+                    </div>
+                    <a href="tel:+18046166167" class="btn btn-cyan" style="font-size:1.1rem; padding:1rem 1.5rem; display:inline-flex; align-items:center; gap:0.5rem;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        Call (804) 616-6167
+                    </a>
+                    <button class="btn btn-cyan hide-on-desktop contact-btn" style="width: 100%; max-width: 400px; padding: 1rem; font-size: 1.15rem; font-weight: 600; margin-top: 1rem;">Get My Free Quote</button>
+                </div>
+                <div class="hero-form hide-on-mobile">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Book Online Now</h2>
+                    <p class="form-sub" style="margin-bottom: 1.5rem;">Simply complete the form below &amp; we'll get back to you as soon as possible</p>
+                    <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent!');">
+                        <div class="form-grid">
+                            <input type="text" aria-label="Name" placeholder="Name" required>
+                            <input type="tel" aria-label="Phone Number" placeholder="Phone Number" required>
+                            <input type="email" aria-label="Email Address" placeholder="Email Address">
+                            <input type="text" aria-label="Area in {name}" placeholder="Your area in {name}" required>
+                            <select class="full-width" aria-label="Select a service" required>
+                                <option value="" disabled selected>Service Required</option>
+                                <option value="drain">Drain Cleaning</option>
+                                <option value="tap">Tap &amp; Fixture Repair</option>
+                                <option value="disposal">Waste Disposal</option>
+                                <option value="leak">Leak Detection</option>
+                                <option value="repipe">System Repipe</option>
+                                <option value="outdoor">Outdoor Plumbing</option>
+                                <option value="sewer">Sewer Cleaning</option>
+                                <option value="sump">Sump Pumps</option>
+                                <option value="toilet">Shower &amp; Toilet</option>
+                                <option value="waterheater">Water Heaters</option>
+                                <option value="construction">New Construction</option>
+                                <option value="emergency">Emergency Repairs</option>
+                                <option value="other">Other / General Inquiry</option>
+                            </select>
+                            <button type="submit" class="full-width btn-cyan">Get My Free Quote</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-mid">
+            <div class="container fade-in">
+                <div class="section-header center">
+                    <h2>Proudly Serving {name}</h2>
+                </div>
+                <div style="max-width: 1000px; margin: 0 auto; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                    <iframe
+                        src="https://www.google.com/maps?q={map_query}&output=embed"
+                        width="100%"
+                        height="450"
+                        style="border:0; display:block;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Plumber in {name} VA Map">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-dark">
+            <div class="container fade-in">
+                <div class="section-header center">
+                    <h2>Serving {name} with Pride</h2>
+                    <p>BigLion Plumbing is locally owned and operated, serving {name} residents with honest, upfront pricing and expert workmanship.</p>
+                </div>
+                <div class="features-grid staggered">
+                    <div class="premium-card">
+                        <div class="watermark-number">01</div>
+                        <h3>Fast Response</h3>
+                        <p>We respond quickly to calls across {name} - no long waits, no runaround.</p>
+                    </div>
+                    <div class="premium-card">
+                        <div class="watermark-number">02</div>
+                        <h3>Honest Pricing</h3>
+                        <p>Upfront quotes with no hidden fees. You know exactly what you're paying before we start.</p>
+                    </div>
+                    <div class="premium-card">
+                        <div class="watermark-number">03</div>
+                        <h3>Clean Workmanship</h3>
+                        <p>We treat your home with respect - boot covers, tidy work areas, and thorough cleanup every time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+{FOOTER_BLOCK}
+
+{modal}
+
+</body>
+</html>"""
+
+print("Generating Richmond VA area pages...")
+for slug, name, hoods, map_q in AREAS:
+    html = build_page(slug, name, hoods, map_q)
+    path = os.path.join(ROOT, f"{slug}.html")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"  CREATED: {slug}.html")
+
+print(f"\nAll {len(AREAS)} area pages generated.")
