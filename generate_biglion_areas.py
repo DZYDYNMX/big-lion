@@ -58,7 +58,7 @@ NAV_BLOCK = """    <header class="navbar">
                     </div>
                 </li>
                 <li>
-                    <a href="areas.html">Service Areas <span class="desktop-only-arrow">▾</span></a>
+                    <a href="areas.html" class="active">Service Areas <span class="desktop-only-arrow">▾</span></a>
                     <div class="dropdown-menu">
                         <a href="areas.html">View All Areas</a>
                         <a href="area-richmond-city.html">Richmond City</a>
