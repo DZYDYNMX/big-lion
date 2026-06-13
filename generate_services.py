@@ -311,7 +311,6 @@ TEMPLATE = """<!DOCTYPE html>
                         <a href="service-emergency.html">Emergency Repairs</a>
                     </div>
                 </li>
-                <li><a href="gallery.html">Our Work</a></li>
                 <li><a href="areas.html">Service Areas</a></li>
                 <li><a href="about.html">About Us</a></li>
                 <li><a href="tel:+19367552836" class="nav-phone-inline" style="color: var(--cyan); font-weight: 600;">(936) 755-2836</a></li>

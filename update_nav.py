@@ -49,7 +49,7 @@ files_to_update = [
 ]
 
 target_nav = '<li><a href="areas.html">Service Areas</a></li>'
-new_nav = '<li><a href="gallery.html">Our Work</a></li>\n                <li><a href="areas.html">Service Areas</a></li>'
+new_nav = '\n                <li><a href="areas.html">Service Areas</a></li>'
 
 for filename in files_to_update:
     if os.path.exists(filename):

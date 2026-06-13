@@ -57,7 +57,6 @@ NAV_BLOCK = """    <header class="navbar">
                         <a href="service-emergency.html">Emergency Repairs</a>
                     </div>
                 </li>
-                <li><a href="gallery.html">Gallery</a></li>
                 <li>
                     <a href="areas.html">Service Areas <span class="desktop-only-arrow">▾</span></a>
                     <div class="dropdown-menu">
