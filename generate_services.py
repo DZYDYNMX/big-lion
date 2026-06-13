@@ -277,7 +277,7 @@ TEMPLATE = """<!DOCTYPE html>
     <link rel="icon" href="data:,">
     <meta property="og:title" content="BigLion Plumbing | {title}">
     <meta property="og:description" content="{desc}">
-    <meta property="og:image" content="https://libertyplumbing.com/{image}">
+    <meta property="og:image" content="https://biglionplumbing.com/{image}">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="styles.css?v=15">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -288,7 +288,7 @@ TEMPLATE = """<!DOCTYPE html>
 <body>
     <header class="navbar">
         <div class="nav-main">
-            <a href="index.html" class="logo-text">Liberty <span>Plumbing</span></a>
+            <a href="index.html" class="logo-img-link"><img src="assets/biglion-logo.png" alt="BigLion Plumbing" class="nav-logo-img"></a>
             <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
                 <span></span><span></span><span></span>
             </button>
@@ -350,7 +350,7 @@ TEMPLATE = """<!DOCTYPE html>
         <section class="section section-mid" style="padding-top: 4rem; padding-bottom: 4rem; background: var(--navy-mid);">
             <div class="container fade-in">
                 <div class="section-header center" style="margin-bottom: 3rem;">
-                    <div class="label">Expert Insights</div>
+
                     <h2>{problems_title}</h2>
                     <p style="color: var(--light-gray); max-width: 800px; margin: 1rem auto; font-size: 1.05rem;">{problems_intro}</p>
                 </div>
@@ -364,7 +364,7 @@ TEMPLATE = """<!DOCTYPE html>
         <section class="section section-dark" style="padding-top: 4rem; padding-bottom: 2rem;">
             <div class="container fade-in">
                 <div class="section-header center" style="margin-bottom: 3rem;">
-                    <div class="label">Why Choose Us</div>
+
                     <h2>{features_title}</h2>
                 </div>
                 <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
@@ -390,7 +390,7 @@ TEMPLATE = """<!DOCTYPE html>
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <a href="index.html" class="logo-text" style="display:inline-block; margin-bottom:1rem;">Liberty <span>Plumbing</span></a>
+                <a href="index.html" class="logo-img-link"><img src="assets/biglion-logo.png" alt="BigLion Plumbing" class="nav-logo-img" style="height:60px;"></a>
                 <p>For a trusted local plumber, simply fill out our booking form. Our friendly team is always here to offer the help you need. Providing upfront quotes with no hidden fees!</p>
                 <div class="nav-social" style="margin-top: 1rem;">
                     <a href="https://web.facebook.com/p/Biglion-plumbing-services-61584886455564/?_rdc=1&_rdr" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg></a>
@@ -428,7 +428,7 @@ TEMPLATE = """<!DOCTYPE html>
                 <h4>Contact Info</h4>
                 <ul>
                     <li style="color:var(--muted); font-size:0.9rem;"><strong>Phone:</strong> <a href="tel:+19367552836">(936) 755-2836</a></li>
-                    <li style="color:var(--muted); font-size:0.9rem;"><strong>Email:</strong> <a href="mailto:info@libertyplumbing.com" style="color: inherit; text-decoration: none;">info@libertyplumbing.com</a></li>
+                    <li style="color:var(--muted); font-size:0.9rem;"><strong>Email:</strong> <a href="mailto:info@biglionplumbing.com" style="color: inherit; text-decoration: none;">info@biglionplumbing.com</a></li>
                     <li style="color:var(--muted); font-size:0.9rem;"><strong>Hours:</strong> 24/7 Emergency Service</li>
                 </ul>
             </div>
