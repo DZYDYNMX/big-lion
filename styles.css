@@ -1905,12 +1905,7 @@ a:focus-visible, button:focus-visible {
     padding: 0 1.5rem;
     position: relative;
 }
-.marquee-item::after {
-    content: '\2022'; /* Bullet */
-    color: var(--cyan);
-    position: absolute;
-    right: -4px;
-}
+
 @keyframes marquee-scroll {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
